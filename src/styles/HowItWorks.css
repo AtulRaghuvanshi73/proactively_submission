@@ -110,10 +110,14 @@
   display: flex;
   overflow-x: auto;
   gap: 1rem;
-  padding: 0.5rem 0;
+  padding: 0.75rem 0.5rem;
   scroll-behavior: smooth;
   scrollbar-width: none; /* Firefox */
   -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 1.5rem; /* Extra padding for active card transformation */
+  touch-action: pan-x; /* Enable horizontal panning for touch */
+  cursor: grab; /* Show grab cursor on desktop */
 }
 
 .pillar-cards::-webkit-scrollbar {
@@ -124,12 +128,14 @@
   flex: 0 0 300px;
   min-width: 300px;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  opacity: 0.7;
+  opacity: 0.75;
+  scroll-snap-align: center;
+  padding: 0.5rem 0;
 }
 
 .pillar-card-wrapper.active {
   opacity: 1;
-  transform: translateY(-10px);
+  transform: translateY(-8px);
 }
 
 @media (min-width: 768px) {

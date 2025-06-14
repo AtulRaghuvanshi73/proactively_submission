@@ -1,8 +1,8 @@
 import "../styles/PillarCard.css"
 
-const PillarCard = ({ title, description, image, minutes, hours, suffix = "" }) => {
+const PillarCard = ({ title, description, image, minutes, hours, suffix = "", isActive = false }) => {
   return (
-    <div className="pillar-card">
+    <div className={`pillar-card ${isActive ? 'active' : ''}`}>
       <div className="pillar-image">
         <img src={image || "/placeholder.svg"} alt={title} />
         <div className="time-indicator">

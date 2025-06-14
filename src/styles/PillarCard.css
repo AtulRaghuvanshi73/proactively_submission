@@ -11,9 +11,13 @@
     box-shadow 0.3s ease;
 }
 
-.pillar-card:hover {
+.pillar-card:hover, .pillar-card.active {
   transform: translateY(-5px);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.pillar-card.active {
+  border: 2px solid rgba(230, 126, 34, 0.3);
 }
 
 .pillar-image {
