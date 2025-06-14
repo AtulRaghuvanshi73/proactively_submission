@@ -5,11 +5,24 @@
   overflow: hidden;
 }
 
+.hero-container {
+  display: flex;
+  flex-direction: column-reverse; /* Content first, then carousel on mobile */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .hero-content {
   max-width: 1200px;
   margin: 0 auto;
   text-align: left;
-  padding: 2rem 1rem;
+  padding: 2rem 0;
+}
+
+.hero-carousel {
+  margin-top: 1rem;
+  width: 100%;
+  overflow: hidden;
 }
 
 .hero h1 {
@@ -34,9 +47,25 @@
     padding: 3rem 2rem;
   }
 
+  .hero-container {
+    flex-direction: row; /* Carousel on left, content on right for desktop */
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-between;
+  }
+
   .hero-content {
-    padding: 3rem 2rem;
+    padding: 3rem 0;
     text-align: left;
+    flex: 1;
+    order: 2; /* Push content to the right */
+  }
+
+  .hero-carousel {
+    flex: 1;
+    margin-top: 0;
+    order: 1; /* Keep carousel on the left */
+    max-width: 45%;
   }
 
   .hero h1 {
@@ -51,6 +80,10 @@
 
   .hero p {
     font-size: 1.1rem;
+  }
+
+  .hero-container {
+    gap: 3rem;
   }
 }
 

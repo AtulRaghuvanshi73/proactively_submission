@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import "../styles/ImageColumns.css"
 
-const ImageColumns = () => {
+const ImageColumns = ({ inHero = false }) => {
   const column1Ref = useRef(null)
   const column2Ref = useRef(null)
   const mobileSliderRef = useRef(null)
+  const [isMounted, setIsMounted] = useState(false)
 
   // Images for the columns - using carousel images from public folder
   const images = {
@@ -34,7 +35,22 @@ const ImageColumns = () => {
     ],
   }
 
+  // Set mounted state after component loads
   useEffect(() => {
+    setIsMounted(true)
+    
+    // Cleanup animations on unmount
+    return () => {
+      setIsMounted(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isMounted) return
+    
+    // Store animation intervals to clear them later
+    const intervalIds = []
+    
     // Desktop animations
     const animateDesktopColumns = () => {
       if (window.innerWidth >= 768) {
@@ -43,9 +59,12 @@ const ImageColumns = () => {
           const column1Images = column1Ref.current.querySelectorAll(".column-image")
           let topPosition = 0
 
-          setInterval(() => {
+          const interval1 = setInterval(() => {
             topPosition -= 1
-
+            
+            // Safety check before accessing scrollHeight
+            if (!column1Ref.current) return
+            
             // Reset when the last image is fully visible
             if (Math.abs(topPosition) >= column1Ref.current.scrollHeight / 2) {
               topPosition = 0
@@ -55,6 +74,8 @@ const ImageColumns = () => {
               img.style.transform = `translateY(${topPosition}px)`
             })
           }, 30)
+          
+          intervalIds.push(interval1)
         }
 
         // Column 2: Bottom to top animation
@@ -62,9 +83,12 @@ const ImageColumns = () => {
           const column2Images = column2Ref.current.querySelectorAll(".column-image")
           let topPosition = 0
 
-          setInterval(() => {
+          const interval2 = setInterval(() => {
             topPosition += 1
-
+            
+            // Safety check before accessing scrollHeight
+            if (!column2Ref.current) return
+            
             // Reset when the first image is fully visible
             if (Math.abs(topPosition) >= column2Ref.current.scrollHeight / 2) {
               topPosition = 0
@@ -74,6 +98,8 @@ const ImageColumns = () => {
               img.style.transform = `translateY(${topPosition}px)`
             })
           }, 30)
+          
+          intervalIds.push(interval2)
         }
       }
     }
@@ -83,19 +109,30 @@ const ImageColumns = () => {
       if (window.innerWidth < 768 && mobileSliderRef.current) {
         const slider = mobileSliderRef.current
         const sliderWidth = slider.scrollWidth
-        const containerWidth = slider.parentElement.clientWidth
+        let containerWidth = 0
+        
+        // Safely get container width
+        if (slider.parentElement) {
+          containerWidth = slider.parentElement.clientWidth
+        }
+        
         let position = 0
 
-        setInterval(() => {
+        const interval3 = setInterval(() => {
           position -= 1
 
+          // Safety check
+          if (!slider) return
+          
           // Reset when all images have scrolled through
           if (Math.abs(position) >= sliderWidth - containerWidth) {
             position = 0
           }
 
           slider.style.transform = `translateX(${position}px)`
-        }, 20)
+        }, 25) // Slowing down slightly for smoother animation
+        
+        intervalIds.push(interval3)
       }
     }
 
@@ -105,6 +142,9 @@ const ImageColumns = () => {
 
     // Handle resize
     const handleResize = () => {
+      // Clear all animation intervals and restart
+      intervalIds.forEach(id => clearInterval(id))
+      
       // Reset positions and reinitialize animations
       if (column1Ref.current) {
         column1Ref.current.querySelectorAll(".column-image").forEach((img) => {
@@ -122,19 +162,24 @@ const ImageColumns = () => {
         mobileSliderRef.current.style.transform = "translateX(0)"
       }
 
-      animateDesktopColumns()
-      animateMobileSlider()
+      // Small timeout to ensure DOM is ready
+      setTimeout(() => {
+        animateDesktopColumns()
+        animateMobileSlider()
+      }, 100)
     }
 
     window.addEventListener("resize", handleResize)
 
     return () => {
+      // Clean up all intervals on unmount
+      intervalIds.forEach(id => clearInterval(id))
       window.removeEventListener("resize", handleResize)
     }
-  }, [])
+  }, [isMounted])
 
   return (
-    <section className="image-columns">
+    <section className={`image-columns ${inHero ? 'in-hero' : ''}`}>
       {/* Desktop view: Two columns */}
       <div className="desktop-columns">
         <div className="column" ref={column1Ref}>
