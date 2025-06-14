@@ -1,5 +1,5 @@
 .hero {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   padding: 2rem 1rem;
   position: relative;
   overflow: hidden;
@@ -16,18 +16,21 @@
 
 .hero-content {
   text-align: left;
-  padding: 2rem 0;
+  padding: 2.5rem 0 1rem;
 }
 
 .hero-carousel {
-  margin-top: 1rem;
+  margin-top: 0;
   width: 100%;
-  overflow: hidden;
+  overflow: visible; /* Allow content to be visible */
+  position: relative;
+  height: auto;
+  min-height: 200px; /* Ensure minimum height */
 }
 
 .hero h1 {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 600;
   margin-bottom: 1rem;
   line-height: 1.2;
   letter-spacing: -0.02rem;
@@ -35,10 +38,10 @@
 }
 
 .hero p {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #666;
-  max-width: 500px;
-  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-bottom: 1.5rem;
   line-height: 1.5;
 }
 
@@ -124,24 +127,30 @@
 
 @media (min-width: 768px) {
   .hero {
-    padding: 3rem 2rem;
+    padding: 2rem 2rem;
   }
 
   .hero-container {
     flex-direction: row;
     align-items: center;
-    gap: 3rem;
+    gap: 2rem;
   }
 
   .hero-content {
     flex: 1;
-    padding: 0;
+    padding: 2rem 0;
   }
 
   .hero-carousel {
     flex: 0 0 auto;
-    width: 280px; /* Fixed width to match design */
+    width: 320px; /* Fixed width to match design */
     margin-top: 0;
+    overflow: visible; /* Allow content to be visible */
+    height: auto;
+    min-height: 400px; /* Match column-wrapper height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .hero h1 {

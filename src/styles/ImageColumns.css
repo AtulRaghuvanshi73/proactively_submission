@@ -3,20 +3,26 @@
   overflow: hidden;
   position: relative;
   width: 100%;
+  visibility: visible; /* Ensure visibility */
 }
 
 /* Desktop Columns */
 .desktop-columns {
   display: none;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
+  position: relative;
+  height: auto; /* Let content determine height */
+  min-height: 400px; /* Minimum height to show content */
+  overflow: visible; /* Allow content to be visible */
 }
 
 .column-wrapper {
   width: 48%;
   overflow: hidden;
-  border-radius: 8px;
-  height: 380px;
+  border-radius: 12px;
+  height: 400px;
+  position: relative;
 }
 
 .column {
@@ -26,6 +32,7 @@
   width: 100%;
   height: auto;
   will-change: transform; /* Performance optimization */
+  position: relative;
 }
 
 .column-image-wrapper {
@@ -100,11 +107,25 @@
   .desktop-columns {
     display: flex;
     justify-content: space-between;
+    height: auto;
+    min-height: 350px;
+    padding: 1rem 0;
+  }
+  
+  .column-wrapper {
     height: 350px;
+    opacity: 1; /* Ensure visibility */
+    visibility: visible; /* Ensure visibility */
   }
 
   .mobile-slider-container {
     display: none;
+  }
+  
+  /* Ensure images are visible */
+  .column-image-wrapper {
+    opacity: 1;
+    visibility: visible;
   }
 }
 

@@ -25,6 +25,11 @@ main.blur {
   filter: blur(4px);
 }
 
+.hero-section-wrapper {
+  position: relative;
+  background-color: #ffffff;
+}
+
 .highlight {
   color: #2aabee;
 }

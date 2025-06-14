@@ -1,8 +1,17 @@
 .how-it-works {
   padding: 4rem 1rem 5rem;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  background-color: #f8f9fb;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.how-it-works-inner {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #f8f9fb;
+  position: relative;
 }
 
 .how-it-works-header {
@@ -27,14 +36,14 @@
 
 .lifestyle-medicine h3 {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 400;
   color: #333;
   letter-spacing: -0.02rem;
 }
 
-.lifestyle-medicine h3 span {
+.lifestyle-text {
+  color: #e67e22;
   font-weight: 400;
-  color: #555;
 }
 
 .navigation-buttons {
@@ -61,12 +70,17 @@
 }
 
 /* Pills tabs navigation */
+.pillars-tabs-container {
+  position: relative;
+  margin-bottom: 0;
+}
+
 .pillars-tabs {
   display: flex;
   overflow-x: auto;
   gap: 0.75rem;
-  margin-bottom: 2rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0;
   scrollbar-width: none; /* Firefox */
   -webkit-overflow-scrolling: touch;
 }
@@ -101,23 +115,29 @@
 /* Cards layout */
 .pillar-cards-container {
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
   margin: 0 -1rem;
   padding: 0 1rem;
+  width: 100%;
+  margin-top: -0.5rem; /* Adjust for first card positioning under the Nutrition button */
 }
 
 .pillar-cards {
   display: flex;
   overflow-x: auto;
   gap: 1rem;
-  padding: 0.75rem 0.5rem;
+  padding: 1rem 0.5rem 2rem;
   scroll-behavior: smooth;
   scrollbar-width: none; /* Firefox */
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
-  padding-bottom: 1.5rem; /* Extra padding for active card transformation */
   touch-action: pan-x; /* Enable horizontal panning for touch */
   cursor: grab; /* Show grab cursor on desktop */
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+  /* Add right padding to ensure last card is fully visible when scrolled */
+  padding-right: calc(1rem + 280px - 100px); /* Extra space for last card */
 }
 
 .pillar-cards::-webkit-scrollbar {
@@ -125,17 +145,35 @@
 }
 
 .pillar-card-wrapper {
-  flex: 0 0 300px;
-  min-width: 300px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  opacity: 0.75;
+  flex: 0 0 280px;
+  min-width: 280px;
+  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0.8;
   scroll-snap-align: center;
   padding: 0.5rem 0;
+  position: relative;
+  height: auto;
+  margin: 0 0.5rem;
 }
 
 .pillar-card-wrapper.active {
   opacity: 1;
   transform: translateY(-8px);
+  z-index: 2; /* Ensure the active card is on top */
+}
+
+/* Special styling for the last card to ensure it's fully visible when active */
+.pillar-card-wrapper:last-child.active {
+  opacity: 1;
+  transform: translateY(-8px);
+  z-index: 10; /* Higher z-index for the last card when active */
+}
+
+/* Add focus styles for keyboard accessibility */
+.pillar-tab:focus,
+.pillar-card-wrapper:focus {
+  outline: 2px solid #e67e22;
+  outline-offset: 2px;
 }
 
 @media (min-width: 768px) {
@@ -148,23 +186,115 @@
   }
   
   .pillars-tabs {
-    justify-content: center;
-    margin-bottom: 2.5rem;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+  }
+  
+  /* Adjust for tab-to-card alignment */
+  .pillar-cards-container {
+    margin-top: -0.5rem;
   }
 }
 
 @media (min-width: 1024px) {
+  .how-it-works {
+    padding: 6rem 2rem;
+  }
+
+  .how-it-works-inner {
+    max-width: 1280px;
+  }
+  
   .pillar-cards {
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: nowrap;
+    padding: 1rem 0.5rem 2rem;
+    overflow-x: visible;
+    /* Add specific right padding for desktop to ensure last card is visible */
+    padding-right: calc(2rem + 280px); /* Extra space for last card */
+  }
+  
+  .pillar-cards-container {
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+    margin-top: -0.5rem;
+    width: 100%;
   }
   
   .pillar-card-wrapper {
-    flex: 0 0 320px;
-    min-width: 320px;
+    flex: 0 0 300px;
+    min-width: 300px;
+    margin: 0 0.5rem;
+    scroll-snap-align: start;
+    transform: scale(0.95); /* Slightly reduce all cards */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .pillar-card-wrapper.active {
+    transform: scale(1) translateY(-8px); /* Active card returns to normal size and lifts */
+  }
+  
+  /* Last card container adjustments */
+  .pillar-cards {
+    position: relative;
+    scroll-padding-right: 300px; /* Creates scroll padding at the end */
+  }
+  
+  /* Special handling for the substance abuse card (last card) */
+  .pillar-card-wrapper:last-child {
+    margin-right: 1.5rem; /* Extra margin to ensure it's fully visible */
+  }
+  
+  .pillar-card-wrapper:last-child.active {
+    transform: scale(1) translateY(-8px);
   }
   
   .lifestyle-medicine h3 {
     font-size: 2rem;
+  }
+  
+  .pillars-tabs {
+    justify-content: flex-start;
+  }
+}
+
+/* Large desktop screens */
+@media (min-width: 1440px) {
+  .how-it-works {
+    padding: 7rem 2rem;
+  }
+  
+  .how-it-works-inner {
+    max-width: 1400px;
+  }
+  
+  .pillar-cards-container {
+    overflow: visible;
+    margin: 0;
+    margin-top: -0.5rem;
+  }
+  
+  .pillar-cards {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: visible;
+    padding: 1.5rem 0;
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0;
+  }
+  
+  .pillar-card-wrapper {
+    flex: 0 0 280px;
+    min-width: 280px;
+    opacity: 0.85;
+    margin: 0 0.75rem;
+    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .pillar-card-wrapper.active {
+    opacity: 1;
+    transform: scale(1.05) translateY(-10px);
   }
 }

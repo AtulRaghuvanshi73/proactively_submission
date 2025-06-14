@@ -8,6 +8,12 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Add aliases to make Next.js imports work in Vite
+      "next/dynamic": path.resolve(__dirname, "./node_modules/next/dynamic.js"),
     },
+  },
+  // Prevent conflicts with Next.js build
+  build: {
+    outDir: "vite-dist",
   },
 })

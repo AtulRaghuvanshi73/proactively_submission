@@ -55,46 +55,96 @@ const ImageColumns = ({ inHero = false }) => {
       if (window.innerWidth >= 768) {
         // Column 1: Top to bottom animation
         if (column1Ref.current) {
-          const column1Images = column1Ref.current.querySelectorAll(".column-image-wrapper")
-          let topPosition = 0
+          // Calculate initial scrollHeight to avoid accessing it repeatedly
+          let column1ScrollHeight = 0;
+          try {
+            column1ScrollHeight = column1Ref.current.scrollHeight;
+          } catch (e) {
+            console.warn("Failed to get column1 scrollHeight", e);
+          }
+          
+          let topPosition = 0;
 
           const interval1 = setInterval(() => {
-            topPosition -= 0.5 // Slower speed for smoother animation
+            // Check if ref still exists
+            if (!column1Ref.current) {
+              clearInterval(interval1);
+              return;
+            }
             
-            // Safety check before accessing scrollHeight
-            if (!column1Ref.current) return
+            topPosition -= 0.5; // Slower speed for smoother animation
+            
+            // Calculate or refresh scrollHeight if needed
+            if (column1ScrollHeight <= 0) {
+              try {
+                column1ScrollHeight = column1Ref.current.scrollHeight;
+                // If still not valid, skip this frame
+                if (column1ScrollHeight <= 0) return;
+              } catch (e) {
+                return;
+              }
+            }
             
             // Reset when the last image is fully visible
-            if (Math.abs(topPosition) >= column1Ref.current.scrollHeight / 2) {
-              topPosition = 0
+            if (Math.abs(topPosition) >= column1ScrollHeight / 2) {
+              topPosition = 0;
             }
 
-            column1Ref.current.style.transform = `translateY(${topPosition}px)`
-          }, 20)
+            try {
+              column1Ref.current.style.transform = `translateY(${topPosition}px)`;
+            } catch (e) {
+              // Handle any styling errors
+            }
+          }, 20);
           
-          intervalIds.push(interval1)
+          intervalIds.push(interval1);
         }
 
         // Column 2: Bottom to top animation
         if (column2Ref.current) {
-          const column2Images = column2Ref.current.querySelectorAll(".column-image-wrapper")
-          let topPosition = 0
+          // Calculate initial scrollHeight to avoid accessing it repeatedly
+          let column2ScrollHeight = 0;
+          try {
+            column2ScrollHeight = column2Ref.current.scrollHeight;
+          } catch (e) {
+            console.warn("Failed to get column2 scrollHeight", e);
+          }
+          
+          let topPosition = 0;
 
           const interval2 = setInterval(() => {
-            topPosition += 0.5 // Slower speed for smoother animation
+            // Check if ref still exists
+            if (!column2Ref.current) {
+              clearInterval(interval2);
+              return;
+            }
             
-            // Safety check before accessing scrollHeight
-            if (!column2Ref.current) return
+            topPosition += 0.5; // Slower speed for smoother animation
+            
+            // Calculate or refresh scrollHeight if needed
+            if (column2ScrollHeight <= 0) {
+              try {
+                column2ScrollHeight = column2Ref.current.scrollHeight;
+                // If still not valid, skip this frame
+                if (column2ScrollHeight <= 0) return;
+              } catch (e) {
+                return;
+              }
+            }
             
             // Reset when the first image is fully visible
-            if (Math.abs(topPosition) >= column2Ref.current.scrollHeight / 2) {
-              topPosition = 0
+            if (Math.abs(topPosition) >= column2ScrollHeight / 2) {
+              topPosition = 0;
             }
 
-            column2Ref.current.style.transform = `translateY(${topPosition}px)`
-          }, 20)
+            try {
+              column2Ref.current.style.transform = `translateY(${topPosition}px)`;
+            } catch (e) {
+              // Handle any styling errors
+            }
+          }, 20);
           
-          intervalIds.push(interval2)
+          intervalIds.push(interval2);
         }
       }
     }
@@ -102,32 +152,58 @@ const ImageColumns = ({ inHero = false }) => {
     // Mobile animation: Right to left
     const animateMobileSlider = () => {
       if (window.innerWidth < 768 && mobileSliderRef.current) {
-        const slider = mobileSliderRef.current
-        const sliderWidth = slider.scrollWidth
-        let containerWidth = 0
+        const slider = mobileSliderRef.current;
+        let sliderWidth = 0;
+        let containerWidth = 0;
         
-        // Safely get container width
-        if (slider.parentElement) {
-          containerWidth = slider.parentElement.clientWidth
+        try {
+          sliderWidth = slider.scrollWidth;
+          
+          // Safely get container width
+          if (slider.parentElement) {
+            containerWidth = slider.parentElement.clientWidth;
+          }
+        } catch (e) {
+          console.warn("Failed to get slider dimensions", e);
+          return; // Don't set up animation if we can't get dimensions
         }
         
-        let position = 0
+        // Only proceed if we have valid measurements
+        if (sliderWidth <= 0 || containerWidth <= 0) return;
+        
+        let position = 0;
 
         const interval3 = setInterval(() => {
-          position -= 0.5 // Slower speed for smoother animation
-
-          // Safety check
-          if (!slider) return
-          
-          // Reset when all images have scrolled through
-          if (Math.abs(position) >= sliderWidth - containerWidth) {
-            position = 0
+          // Check if ref still exists
+          if (!mobileSliderRef.current) {
+            clearInterval(interval3);
+            return;
           }
+          
+          position -= 0.5; // Slower speed for smoother animation
+          
+          try {
+            // Refresh measurements occasionally to handle resizing
+            if (position % 100 === 0) {
+              sliderWidth = mobileSliderRef.current.scrollWidth;
+              if (mobileSliderRef.current.parentElement) {
+                containerWidth = mobileSliderRef.current.parentElement.clientWidth;
+              }
+            }
+            
+            // Reset when all images have scrolled through
+            if (Math.abs(position) >= sliderWidth - containerWidth) {
+              position = 0;
+            }
 
-          slider.style.transform = `translateX(${position}px)`
-        }, 20)
+            mobileSliderRef.current.style.transform = `translateX(${position}px)`;
+          } catch (e) {
+            // Handle any errors from reading dimensions or setting style
+            clearInterval(interval3);
+          }
+        }, 20);
         
-        intervalIds.push(interval3)
+        intervalIds.push(interval3);
       }
     }
 
@@ -137,37 +213,72 @@ const ImageColumns = ({ inHero = false }) => {
       animateMobileSlider()
     }, 100)
 
+    // Debounce function to prevent excessive resize calls
+    const debounce = (func, delay) => {
+      let timeoutId;
+      return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func(...args), delay);
+      };
+    };
+
     // Handle resize
-    const handleResize = () => {
-      // Clear all animation intervals and restart
-      intervalIds.forEach(id => clearInterval(id))
+    const handleResize = debounce(() => {
+      // Clear all animation intervals
+      intervalIds.forEach(id => clearInterval(id));
+      intervalIds.length = 0; // Clear the array
       
-      // Reset positions and reinitialize animations
-      if (column1Ref.current) {
-        column1Ref.current.style.transform = "translateY(0)"
-      }
+      // Reset positions safely
+      try {
+        if (column1Ref.current) {
+          column1Ref.current.style.transform = "translateY(0)";
+        }
+      } catch (e) {}
+      
+      try {
+        if (column2Ref.current) {
+          column2Ref.current.style.transform = "translateY(0)";
+        }
+      } catch (e) {}
+      
+      try {
+        if (mobileSliderRef.current) {
+          mobileSliderRef.current.style.transform = "translateX(0)";
+        }
+      } catch (e) {}
 
-      if (column2Ref.current) {
-        column2Ref.current.style.transform = "translateY(0)"
-      }
+      // Small timeout to ensure DOM is ready before restarting animations
+      const restartTimer = setTimeout(() => {
+        if (document.body.contains(column1Ref.current) || 
+            document.body.contains(column2Ref.current) || 
+            document.body.contains(mobileSliderRef.current)) {
+          animateDesktopColumns();
+          animateMobileSlider();
+        }
+      }, 200);
+      
+      // Add this timeout to the intervals array so it gets cleared on cleanup
+      intervalIds.push(restartTimer);
+    }, 250); // Debounce resize event for better performance
 
-      if (mobileSliderRef.current) {
-        mobileSliderRef.current.style.transform = "translateX(0)"
-      }
+    window.addEventListener("resize", handleResize);
 
-      // Small timeout to ensure DOM is ready
-      setTimeout(() => {
-        animateDesktopColumns()
-        animateMobileSlider()
-      }, 100)
-    }
-
-    window.addEventListener("resize", handleResize)
+    // Start animations after a small delay
+    const initialTimer = setTimeout(() => {
+      animateDesktopColumns();
+      animateMobileSlider();
+    }, 200);
+    
+    intervalIds.push(initialTimer);
 
     return () => {
-      // Clean up all intervals on unmount
-      intervalIds.forEach(id => clearInterval(id))
-      window.removeEventListener("resize", handleResize)
+      // Clean up all intervals and timers on unmount
+      intervalIds.forEach(id => {
+        clearInterval(id);
+        clearTimeout(id);
+      });
+      
+      window.removeEventListener("resize", handleResize);
     }
   }, [isMounted])
 
