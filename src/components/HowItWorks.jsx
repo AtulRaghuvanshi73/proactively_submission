@@ -14,7 +14,7 @@ const HowItWorks = () => {
       title: "Nutrition",
       description:
         "Evidence supports the use of a whole food, plant-predominant diet to prevent, treat and reverse chronic disease.",
-      image: "/card_image1.svg",
+      image: "/card_image6.svg",
       minutes: 12,
     },
     {
@@ -22,35 +22,35 @@ const HowItWorks = () => {
       title: "Physical activity",
       description:
         "Regular physical activity is key to managing weight, improving mental health, and reducing risk of chronic disease.",
-      image: "/card_image2.svg",
+      image: "/card_image5.svg",
       minutes: 32,
     },
     {
       id: "restorative-sleep",
       title: "Restorative sleep",
       description: "Consistent, quality sleep is essential for cognitive function and physical recovery.",
-      image: "/card_image3.svg",
+      image: "/card_image4.svg",
       hours: 8,
     },
     {
       id: "stress-management",
       title: "Stress management",
       description: "Managing stress effectively improves overall health and prevents chronic conditions.",
-      image: "/card_image4.svg",
+      image: "/card_image3.svg",
       minutes: 15,
     },
     {
       id: "social-connection",
       title: "Social connection",
       description: "Strong social connections contribute to better mental health and longevity.",
-      image: "/card_image5.svg",
+      image: "/card_image2.svg",
       minutes: 45,
     },
     {
       id: "substance-abuse",
       title: "Substance abuse",
       description: "Avoiding harmful substances is crucial for maintaining long-term health and wellbeing.",
-      image: "/card_image6.svg",
+      image: "/card_image1.svg",
       minutes: 20,
     },
   ]

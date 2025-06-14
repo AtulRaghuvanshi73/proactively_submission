@@ -5,7 +5,6 @@ const Hero = () => {
   return (
     <section className="hero">
       <div className="hero-container">
-        {/* On desktop we'll have these in order: carousel then content */}
         <div className="hero-carousel">
           <ImageColumns inHero={true} />
         </div>

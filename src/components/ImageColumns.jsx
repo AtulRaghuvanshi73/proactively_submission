@@ -13,14 +13,14 @@ const ImageColumns = ({ inHero = false }) => {
   const images = {
     column1: [
       "/carousal_image1.svg", 
-      "/carousal_image2.svg", 
       "/carousal_image3.svg", 
-      "/carousal_image4.svg"
+      "/carousal_image5.svg", 
+      "/carousal_image7.svg"
     ],
     column2: [
-      "/carousal_image5.svg", 
+      "/carousal_image2.svg", 
+      "/carousal_image4.svg", 
       "/carousal_image6.svg", 
-      "/carousal_image7.svg", 
       "/carousal_image8.svg"
     ],
     mobile: [
@@ -39,7 +39,6 @@ const ImageColumns = ({ inHero = false }) => {
   useEffect(() => {
     setIsMounted(true)
     
-    // Cleanup animations on unmount
     return () => {
       setIsMounted(false)
     }
@@ -56,11 +55,11 @@ const ImageColumns = ({ inHero = false }) => {
       if (window.innerWidth >= 768) {
         // Column 1: Top to bottom animation
         if (column1Ref.current) {
-          const column1Images = column1Ref.current.querySelectorAll(".column-image")
+          const column1Images = column1Ref.current.querySelectorAll(".column-image-wrapper")
           let topPosition = 0
 
           const interval1 = setInterval(() => {
-            topPosition -= 1
+            topPosition -= 0.5 // Slower speed for smoother animation
             
             // Safety check before accessing scrollHeight
             if (!column1Ref.current) return
@@ -70,21 +69,19 @@ const ImageColumns = ({ inHero = false }) => {
               topPosition = 0
             }
 
-            column1Images.forEach((img) => {
-              img.style.transform = `translateY(${topPosition}px)`
-            })
-          }, 30)
+            column1Ref.current.style.transform = `translateY(${topPosition}px)`
+          }, 20)
           
           intervalIds.push(interval1)
         }
 
         // Column 2: Bottom to top animation
         if (column2Ref.current) {
-          const column2Images = column2Ref.current.querySelectorAll(".column-image")
+          const column2Images = column2Ref.current.querySelectorAll(".column-image-wrapper")
           let topPosition = 0
 
           const interval2 = setInterval(() => {
-            topPosition += 1
+            topPosition += 0.5 // Slower speed for smoother animation
             
             // Safety check before accessing scrollHeight
             if (!column2Ref.current) return
@@ -94,10 +91,8 @@ const ImageColumns = ({ inHero = false }) => {
               topPosition = 0
             }
 
-            column2Images.forEach((img) => {
-              img.style.transform = `translateY(${topPosition}px)`
-            })
-          }, 30)
+            column2Ref.current.style.transform = `translateY(${topPosition}px)`
+          }, 20)
           
           intervalIds.push(interval2)
         }
@@ -119,7 +114,7 @@ const ImageColumns = ({ inHero = false }) => {
         let position = 0
 
         const interval3 = setInterval(() => {
-          position -= 1
+          position -= 0.5 // Slower speed for smoother animation
 
           // Safety check
           if (!slider) return
@@ -130,15 +125,17 @@ const ImageColumns = ({ inHero = false }) => {
           }
 
           slider.style.transform = `translateX(${position}px)`
-        }, 25) // Slowing down slightly for smoother animation
+        }, 20)
         
         intervalIds.push(interval3)
       }
     }
 
-    // Initialize animations
-    animateDesktopColumns()
-    animateMobileSlider()
+    // Initialize animations with a small delay to ensure DOM is ready
+    setTimeout(() => {
+      animateDesktopColumns()
+      animateMobileSlider()
+    }, 100)
 
     // Handle resize
     const handleResize = () => {
@@ -147,15 +144,11 @@ const ImageColumns = ({ inHero = false }) => {
       
       // Reset positions and reinitialize animations
       if (column1Ref.current) {
-        column1Ref.current.querySelectorAll(".column-image").forEach((img) => {
-          img.style.transform = "translateY(0)"
-        })
+        column1Ref.current.style.transform = "translateY(0)"
       }
 
       if (column2Ref.current) {
-        column2Ref.current.querySelectorAll(".column-image").forEach((img) => {
-          img.style.transform = "translateY(0)"
-        })
+        column2Ref.current.style.transform = "translateY(0)"
       }
 
       if (mobileSliderRef.current) {
@@ -182,32 +175,36 @@ const ImageColumns = ({ inHero = false }) => {
     <section className={`image-columns ${inHero ? 'in-hero' : ''}`}>
       {/* Desktop view: Two columns */}
       <div className="desktop-columns">
-        <div className="column" ref={column1Ref}>
-          {images.column1.map((src, index) => (
-            <div key={`col1-${index}`} className="column-image-container">
-              <img src={src || "/placeholder.svg"} alt={`Lifestyle image ${index + 1}`} className="column-image" />
-            </div>
-          ))}
-          {/* Duplicate images for seamless loop */}
-          {images.column1.map((src, index) => (
-            <div key={`col1-dup-${index}`} className="column-image-container">
-              <img src={src || "/placeholder.svg"} alt={`Lifestyle image ${index + 1}`} className="column-image" />
-            </div>
-          ))}
+        <div className="column-wrapper">
+          <div className="column" ref={column1Ref}>
+            {images.column1.map((src, index) => (
+              <div key={`col1-${index}`} className="column-image-wrapper">
+                <img src={src || "/placeholder.svg"} alt={`Lifestyle image ${index + 1}`} className="column-image" />
+              </div>
+            ))}
+            {/* Duplicate images for seamless loop */}
+            {images.column1.map((src, index) => (
+              <div key={`col1-dup-${index}`} className="column-image-wrapper">
+                <img src={src || "/placeholder.svg"} alt={`Lifestyle image ${index + 1}`} className="column-image" />
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="column" ref={column2Ref}>
-          {images.column2.map((src, index) => (
-            <div key={`col2-${index}`} className="column-image-container">
-              <img src={src || "/placeholder.svg"} alt={`Lifestyle image ${index + 4}`} className="column-image" />
-            </div>
-          ))}
-          {/* Duplicate images for seamless loop */}
-          {images.column2.map((src, index) => (
-            <div key={`col2-dup-${index}`} className="column-image-container">
-              <img src={src || "/placeholder.svg"} alt={`Lifestyle image ${index + 4}`} className="column-image" />
-            </div>
-          ))}
+        <div className="column-wrapper">
+          <div className="column" ref={column2Ref}>
+            {images.column2.map((src, index) => (
+              <div key={`col2-${index}`} className="column-image-wrapper">
+                <img src={src || "/placeholder.svg"} alt={`Lifestyle image ${index + 4}`} className="column-image" />
+              </div>
+            ))}
+            {/* Duplicate images for seamless loop */}
+            {images.column2.map((src, index) => (
+              <div key={`col2-dup-${index}`} className="column-image-wrapper">
+                <img src={src || "/placeholder.svg"} alt={`Lifestyle image ${index + 4}`} className="column-image" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
