@@ -1,14 +1,23 @@
-import { Clock } from "lucide-react"
 import "../styles/PillarCard.css"
 
-const PillarCard = ({ title, description, image, minutes, hours }) => {
+const PillarCard = ({ title, description, image, minutes, hours, suffix = "" }) => {
   return (
     <div className="pillar-card">
       <div className="pillar-image">
         <img src={image || "/placeholder.svg"} alt={title} />
         <div className="time-indicator">
-          <Clock className="clock-icon" />
-          <span>{hours ? `${hours} hours` : `${minutes} minutes`}</span>
+          {hours ? (
+            <div className="time-badge">
+              <span className="time-value">{hours}</span>
+              <span className="time-unit">hours</span>
+            </div>
+          ) : (
+            <div className="time-badge">
+              <span className="time-value">{minutes}</span>
+              <span className="time-suffix">{suffix}</span>
+              <span className="time-unit">minutes</span>
+            </div>
+          )}
         </div>
       </div>
       <div className="pillar-content">

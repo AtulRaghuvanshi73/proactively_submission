@@ -1,34 +1,40 @@
 .how-it-works {
-  padding: 3rem 1rem;
+  padding: 4rem 1rem 5rem;
   max-width: 1200px;
   margin: 0 auto;
+  background-color: #f8f9fb;
 }
 
 .how-it-works-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .how-it-works-header h2 {
-  font-size: 0.9rem;
-  color: #666;
+  font-size: 0.85rem;
+  color: #e67e22;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.05rem;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
 }
 
 .lifestyle-medicine {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1rem;
 }
 
 .lifestyle-medicine h3 {
   font-size: 1.5rem;
   font-weight: 600;
+  color: #333;
+  letter-spacing: -0.02rem;
 }
 
-.lifestyle-medicine span {
+.lifestyle-medicine h3 span {
   font-weight: 400;
+  color: #555;
 }
 
 .navigation-buttons {
@@ -40,26 +46,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border: 1px solid #ddd;
   border-radius: 50%;
   background-color: #fff;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .nav-button:hover {
   background-color: #f5f5f5;
+  border-color: #ccc;
 }
 
+/* Pills tabs navigation */
 .pillars-tabs {
   display: flex;
   overflow-x: auto;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-bottom: 2rem;
   padding-bottom: 0.5rem;
   scrollbar-width: none; /* Firefox */
+  -webkit-overflow-scrolling: touch;
 }
 
 .pillars-tabs::-webkit-scrollbar {
@@ -68,14 +77,20 @@
 
 .pillar-tab {
   flex: 0 0 auto;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.25rem;
   border: none;
   background-color: transparent;
   border-radius: 20px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.15s ease;
   white-space: nowrap;
+  color: #555;
+}
+
+.pillar-tab:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .pillar-tab.active {
@@ -83,55 +98,67 @@
   color: #fff;
 }
 
-.pillar-cards {
+/* Cards layout */
+.pillar-cards-container {
   position: relative;
-  min-height: 300px;
+  overflow: hidden;
+  margin: 0 -1rem;
+  padding: 0 1rem;
 }
 
-.pillar-card-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+.pillar-cards {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -webkit-overflow-scrolling: touch;
 }
 
-.pillar-card-container.active {
+.pillar-cards::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.pillar-card-wrapper {
+  flex: 0 0 300px;
+  min-width: 300px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.7;
+}
+
+.pillar-card-wrapper.active {
   opacity: 1;
-  visibility: visible;
+  transform: translateY(-10px);
 }
 
 @media (min-width: 768px) {
   .how-it-works {
-    padding: 4rem 2rem;
+    padding: 5rem 2rem 6rem;
   }
 
   .lifestyle-medicine h3 {
     font-size: 1.8rem;
   }
-
-  .pillar-cards {
-    min-height: 400px;
+  
+  .pillars-tabs {
+    justify-content: center;
+    margin-bottom: 2.5rem;
   }
 }
 
 @media (min-width: 1024px) {
   .pillar-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    min-height: auto;
+    justify-content: center;
+    flex-wrap: nowrap;
   }
-
-  .pillar-card-container {
-    position: relative;
-    opacity: 1;
-    visibility: visible;
+  
+  .pillar-card-wrapper {
+    flex: 0 0 320px;
+    min-width: 320px;
   }
-
-  .pillar-card-container:not(.active) {
-    display: none;
+  
+  .lifestyle-medicine h3 {
+    font-size: 2rem;
   }
 }
